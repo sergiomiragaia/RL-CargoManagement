@@ -27,7 +27,7 @@ public class SceneController : MonoBehaviour
 	public void Awake()
 	{
 		m_envParam = Academy.Instance.EnvironmentParameters;
-		step = (int)m_envParam.GetWithDefault("Initial_Step", 3000000f);
+		step = (int)m_envParam.GetWithDefault("Initial_Step", 0f);
 	}
 
 	void Start()
