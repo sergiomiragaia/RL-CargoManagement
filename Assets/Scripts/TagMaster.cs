@@ -15,9 +15,17 @@ public class TagMaster : Agent
 	[SerializeField] private float maxMotorTorque = 400f;
 	[SerializeField] private float maxSteerAngle = 30f;
 	[SerializeField] private float maxBrakeTorque = 200f;
+	[SerializeField] private float maxBackwardSpeed = 10f;
 	[SerializeField] private int framesUpdateTarget = 1000;
 	[SerializeField] private int startDecisionPeriod = 50;
 	[SerializeField] private int endDecisionPeriod = 5;
+	[SerializeField] public float startMaxApprochSpeed = 10f;
+	[SerializeField] public float endMaxApprochSpeed = 5f;
+	[SerializeField] public float startMaxApprochAngle = 30f;
+	[SerializeField] public float endMaxApprochAngle = 10f;
+	[SerializeField] public float startMaxApprochDistance = 2f;
+	[SerializeField] public float endMaxApprochDistance = 1f;
+	
 	[SerializeField] public List<Wheel> wheelInfos; 
 	[SerializeField] public bool simplePickUp = true;
 	[SerializeField] public Transform tailConnector;
@@ -126,7 +134,7 @@ public class TagMaster : Agent
 
 	public int updateDecionRequest(float unclampedRatio)
 	{
-		float ratio = Mathf.Clamp(unclampedRatio / 2f, 0f, 1f);
+		float ratio = Mathf.Clamp(unclampedRatio / 1.5f, 0f, 1f);
 		DecisionRequester decisionRequester = GetComponent<DecisionRequester>();
 		int period = (int)(endDecisionPeriod * ratio + startDecisionPeriod * (1 - ratio));
 		decisionRequester.DecisionPeriod = period;
@@ -183,16 +191,21 @@ public class TagMaster : Agent
 		
 		CurrentSpeed = Vector3.Dot(rBody.velocity, transform.forward);
 
-		if((actionBuffers.ContinuousActions[0] >= 0 && CurrentSpeed >= 0) ||
-		(actionBuffers.ContinuousActions[0] <= 0 && CurrentSpeed <= 0))
+		if((actionBuffers.ContinuousActions[0] >= 0 && CurrentSpeed >= 0))
 		{
-			// Debug.Log("Acelera");
+			// Debug.Log("Accelerate forward");
 			CurrentAcceleration = actionBuffers.ContinuousActions[0];
+			CurrentBrakeTorque = 0f;
+		}
+		else if(actionBuffers.ContinuousActions[0] <= 0 && CurrentSpeed <= 0)
+		{
+			// Debug.Log("Accelerate backward");
+			CurrentAcceleration = (1 + Mathf.Clamp(CurrentSpeed/maxBackwardSpeed,-1f,0f)) * actionBuffers.ContinuousActions[0];
 			CurrentBrakeTorque = 0f;
 		}
 		else
 		{
-			// Debug.Log("Freia");
+			// Debug.Log("Break");
 			CurrentAcceleration = 0f;
 			CurrentBrakeTorque = Mathf.Abs(actionBuffers.ContinuousActions[0]);
 		}
@@ -241,7 +254,7 @@ public class TagMaster : Agent
 		//if (other.gameObject) return;
 		if (isCarryingCargo && other.gameObject.CompareTag("lane"))
 		{
-			AddReward(0.5f / MaxStep);
+			AddReward(0.9f / MaxStep);
 		}
 	}
 	private void OnTriggerEnter(Collider other)
@@ -339,18 +352,22 @@ public class TagMaster : Agent
 
 	private bool checkAllignment(Collider other)
 	{
-		// Debug.Log("V = " + rBody.velocity.magnitude);
-		if (rBody.velocity.magnitude > 10f) return false;
+		// Max speed
+		float maxSpeed = endMaxApprochSpeed * sceneController.currentRatio + startMaxApprochSpeed * (1 - sceneController.currentRatio);
+		if (rBody.velocity.magnitude > (maxSpeed)) return false;
+
+		// Max angle
+		float maxAngle = endMaxApprochAngle * sceneController.currentRatio + startMaxApprochAngle * (1 - sceneController.currentRatio);
 		Vector3 pickUpFace = other.transform.forward.normalized;
 		float angle = Vector3.Angle(pickUpFace, transform.forward);
-		// Debug.Log("Angle = " + angle);
-		if (Mathf.Abs(angle) > 30f) return false;
+		if (Mathf.Abs(angle) > maxAngle) return false;
+
+		// Max axis distance
+		float maxDistance = endMaxApprochDistance * sceneController.currentRatio + startMaxApprochDistance * (1 - sceneController.currentRatio);
 		Vector3 d = transform.position - other.transform.position;
 		Vector3 projX = Vector3.Project(d, transform.right.normalized);
-		// Debug.Log("projX = " + projX);
-		if (Mathf.Abs(projX.magnitude) > 2f) return false;
-		// Vector3 projZ = Vector3.Project(d, transform.forward.normalized);
-		// Debug.Log("projZ = " + projZ);
+		if (Mathf.Abs(projX.magnitude) > maxDistance) return false;
+
 		return true;
 	}
 

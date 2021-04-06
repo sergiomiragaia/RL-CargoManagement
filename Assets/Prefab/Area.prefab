@@ -2957,7 +2957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74442457dea695d479203b53220d149a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepSaturation: 3000000
+  stepSaturation: 2000000
   GoalAreas:
   - {fileID: 8420238945935976233}
   CargoAreas:
@@ -3308,7 +3308,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 1
   m_BehaviorType: 0
-  m_BehaviorName: Behavior03
+  m_BehaviorName: Behavior01
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -3328,13 +3328,20 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 10000
+  MaxStep: 5000
   maxMotorTorque: 800
   maxSteerAngle: 30
   maxBrakeTorque: 5000
+  maxBackwardSpeed: 10
   framesUpdateTarget: 50
   startDecisionPeriod: 50
   endDecisionPeriod: 10
+  startMaxApprochSpeed: 10
+  endMaxApprochSpeed: 5
+  startMaxApprochAngle: 30
+  endMaxApprochAngle: 10
+  startMaxApprochDistance: 2
+  endMaxApprochDistance: 1
   wheelInfos:
   - model: {fileID: 8421376956124684309}
     collider: {fileID: 433524333637452936}
@@ -3567,7 +3574,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8420238947487704531}
   m_Layer: 0
-  m_Name: Area 2
+  m_Name: Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

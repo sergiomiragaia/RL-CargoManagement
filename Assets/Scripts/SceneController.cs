@@ -17,7 +17,7 @@ public class SceneController : MonoBehaviour
 
 	[SerializeField] public int simultaneousCargo = 2;
 	private int nextId = 0;
-	public int step = 0;
+	public int step;
 	public int agentPeriod = 0;
 	public bool freeToLoad = true;
 	public float currentRatio = 0;
@@ -27,7 +27,7 @@ public class SceneController : MonoBehaviour
 	public void Awake()
 	{
 		m_envParam = Academy.Instance.EnvironmentParameters;
-		step = (int)m_envParam.GetWithDefault("Initial_Step", 0f);
+		step = (int)m_envParam.GetWithDefault("Initial_Step", 3000000f);
 	}
 
 	void Start()
