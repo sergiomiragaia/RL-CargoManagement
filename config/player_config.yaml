@@ -1,0 +1,40 @@
+behaviors:
+  Behavior01:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 512
+      beta: 1.0e-2
+      buffer_size: 8192
+      epsilon: 0.0
+      lambd: 0.95
+      learning_rate: 0.0
+      learning_rate_schedule: linear
+      num_epoch: 3
+    network_settings:
+      hidden_units: 512
+      normalize: false
+      num_layers: 3
+      vis_encode_type: simple
+      memory:
+        memory_size: 256
+        sequence_length: 64
+    keep_checkpoints: 5
+    checkpoint_interval: 1000000
+    max_steps: 2e7
+    summary_freq: 10000
+    time_horizon: 64
+    reward_signals:
+        extrinsic:
+            strength: 1.0
+            gamma: 0.99
+        curiosity:
+            strength: 0.00000001
+            gamma: 0.99
+            encoding_size: 128
+            learning_rate: 0.0
+engine_settings:
+  time_scale: 1
+  no_graphics: true
+debug: false
+environment_parameters:
+  Initial_Step: 1000000.0

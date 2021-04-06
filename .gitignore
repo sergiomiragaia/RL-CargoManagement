@@ -42,6 +42,7 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
+*.meta
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -58,3 +59,257 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+Assets/Materials/Blue.mat
+Assets/Materials/GrayMiddle.mat
+Assets/Materials/Green.mat
+Assets/Materials/GridMatFloor.mat
+Assets/Materials/GridPatternShader.shader
+Assets/Materials/Lane.mat
+Assets/Materials/Red.mat
+Assets/ML-Agents/Timers/Scene01_timers.json
+Assets/ML-Agents/Timers/Scene02_timers.json
+Assets/ML-Agents/Timers/Scene03_timers.json
+Assets/ML-Agents/Timers/Scene04_timers.json
+Assets/ML-Agents/Timers/Test_timers.json
+Assets/Prefab/BrokenVector/LowPolyCarPack/All Assets.unity
+Assets/Prefab/BrokenVector/LowPolyCarPack/Example.unity
+Assets/Prefab/BrokenVector/LowPolyCarPack/Readme.pdf
+Assets/Prefab/BrokenVector/LowPolyCarPack/ExampleAssets/Models/Environment.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/ExampleAssets/Models/Materials/bluegreen.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/ExampleAssets/Models/Materials/road.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/ExampleAssets/Models/Materials/roadalt.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/ExampleAssets/Models/Materials/rock.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/ExampleAssets/Models/Materials/Sand.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/ExampleAssets/Models/Materials/stripes.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/ExampleAssets/Models/Materials/wire.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/ExampleAssets/Models/Materials/wood.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/ExampleAssets/Models/Materials/yellowgreen.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/PBR/Car_Lamps.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/PBR/Car_Paint_Blue.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/PBR/Car_Paint_Green.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/PBR/Car_Paint_Purple.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/PBR/Car_Paint_Red.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/PBR/Car_Paint_Silver.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/PBR/Car_Paint_Yellow.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/PBR/Car_Rubber.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/PBR/Car_Windows.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/Unlit/Car_Lamps_Unlit.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/Unlit/Car_Paint_Blue_Unlit.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/Unlit/Car_Paint_Green_Unlit.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/Unlit/Car_Paint_Purple_Unlit.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/Unlit/Car_Paint_Red_Unlit.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/Unlit/Car_Paint_Silver_Unlit.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/Unlit/Car_Paint_Yellow_Unlit.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/Unlit/Car_Rubber_Unlit.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Materials/Unlit/Car_Windows_Unlit.mat
+Assets/Prefab/BrokenVector/LowPolyCarPack/Models/Bus.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/Models/Car 1.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/Models/Car 2.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/Models/Car 3.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/Models/Car 4.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/Models/Car 5.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/Models/Car 6.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/Models/Policecar.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/Models/Truck 1.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/Models/Truck 2.fbx
+Assets/Prefab/BrokenVector/LowPolyCarPack/Palettes/Palette_Blue.png
+Assets/Prefab/BrokenVector/LowPolyCarPack/Palettes/Palette_Green.png
+Assets/Prefab/BrokenVector/LowPolyCarPack/Palettes/Palette_Purple.png
+Assets/Prefab/BrokenVector/LowPolyCarPack/Palettes/Palette_Red.png
+Assets/Prefab/BrokenVector/LowPolyCarPack/Palettes/Palette_Silver.png
+Assets/Prefab/BrokenVector/LowPolyCarPack/Palettes/Palette_Yellow.png
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Bus_Blue.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Bus_Green.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Bus_Purple.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Bus_Red.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Bus_Silver.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Bus_Yellow.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_1_Blue.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_1_Green.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_1_Purple.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_1_Red.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_1_Silver.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_1_Yellow.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_2_Blue.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_2_Green.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_2_Purple.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_2_Red.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_2_Silver.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_2_Yellow.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_3_Blue.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_3_Green.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_3_Purple.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_3_Red.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_3_Silver.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_3_Yellow.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_4_Blue.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_4_Green.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_4_Purple.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_4_Red.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_4_Silver.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_4_Yellow.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_5_Blue.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_5_Green.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_5_Purple.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_5_Red.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_5_Silver.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_5_Yellow.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_6_Blue.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_6_Green.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_6_Purple.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_6_Silver.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Car_6_Yellow.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Policecar.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_1_Blue.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_1_Green.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_1_Purple.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_1_Red.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_1_Silver.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_1_Yellow.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_2_Blue.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_2_Green.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_2_Purple.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_2_Red.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_2_Silver.prefab
+Assets/Prefab/BrokenVector/LowPolyCarPack/Prefabs/Truck_2_Yellow.prefab
+Assets/Prefab/BrokenVector/LowPolyShaders/Readme.pdf
+Assets/Prefab/BrokenVector/LowPolyShaders/Shaders/LowPolyPBRShader.shader
+Assets/Prefab/BrokenVector/LowPolyShaders/Shaders/LowPolyUnlitShader.shader
+Assets/Prefab/Vehicle - pro 3d models/Main/Textures/Misc_Albedo.tga
+Assets/Prefab/Vehicle - pro 3d models/Main/Textures/Misc_AO.tga
+Assets/Prefab/Vehicle - pro 3d models/Main/Textures/Misc_Normal.tga
+Assets/Prefab/Vehicle - pro 3d models/Main/Textures/MiscMetalness.tga
+Assets/Prefab/Vehicle - pro 3d models/Main/Textures/WindowMetalness.tga
+Assets/Prefab/Vehicle - pro 3d models/Main/Textures/WindowsAlbedo.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Truck02.FBX
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Truck02Wipers.FBX
+Assets/Prefab/Vehicle - pro 3d models/Truck02/WipersMove.controller
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/BodyAlbedo.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/Glass.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/GlassRed.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/InteriorAlbedo.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/LightAlbedo.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/Misc_Albedo.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/MonitorLeft.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/MonitorRight.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/Paint.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/WheelAlbedo.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Materials/Windows.mat
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/BodyAlbedo.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/BodyAo.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/BodyMetallicSmoothness.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/BodyNormal.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/InteriorAlbedo.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/InteriorAo.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/InteriorMetallicSmoothness.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/InteriorNormal.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/LightAlbedo.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/LightMetallicSmoothness.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/LightNormal.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/LightOn.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/MonitorLeft.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/MonitorRight.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/WheelAlbedo.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/WheelAo.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/WheelMetallicSmoothness.tga
+Assets/Prefab/Vehicle - pro 3d models/Truck02/Textures/WheelNormal.tga
+Assets/Scenes/Scene01.unity
+Assets/Scenes/Scene02.unity
+Assets/Scenes/Scene03.unity
+Assets/Scenes/Scene04.unity
+Assets/Scenes/Test.unity
+Assets/Scenes/Scene01/LightingData.asset
+Assets/Scenes/Scene01/ReflectionProbe-0.exr
+Assets/Scenes/Scene02/LightingData.asset
+Assets/Scenes/Scene02/ReflectionProbe-0.exr
+Assets/Scenes/Test/LightingData.asset
+Assets/Scenes/Test/ReflectionProbe-0.exr
+Demo/Manual01_0.demo
+Demo/Manual01_1.demo
+Demo/Manual01_2.demo
+Demo/Manual01.demo
+ProjectSettings/BurstAotSettings_StandaloneWindows.json
+ProjectSettings/ClusterInputManager.asset
+ProjectSettings/DynamicsManager.asset
+ProjectSettings/EditorBuildSettings.asset
+ProjectSettings/EditorSettings.asset
+ProjectSettings/GraphicsSettings.asset
+ProjectSettings/InputManager.asset
+ProjectSettings/NavMeshAreas.asset
+ProjectSettings/Physics2DSettings.asset
+ProjectSettings/PresetManager.asset
+ProjectSettings/ProjectSettings.asset
+ProjectSettings/ProjectVersion.txt
+ProjectSettings/QualitySettings.asset
+ProjectSettings/TagManager.asset
+ProjectSettings/TimeManager.asset
+ProjectSettings/UnityConnectSettings.asset
+ProjectSettings/VFXManager.asset
+ProjectSettings/XRSettings.asset
+results/runX1_01/Behavior03.onnx
+results/runX1_01/configuration.yaml
+results/runX1_01/Behavior03/Behavior03-18701.onnx
+results/runX1_01/Behavior03/Behavior03-18701.pt
+results/runX1_01/Behavior03/checkpoint.pt
+results/runX1_01/Behavior03/events.out.tfevents.1617407593.DESKTOP-TETRIS6.25608.0
+results/runX1_01/run_logs/timers.json
+results/runX1_01/run_logs/training_status.json
+results/runX32_01/Behavior03.onnx
+results/runX32_01/configuration.yaml
+results/runX32_01/Behavior03/Behavior03-499990.pt
+results/runX32_01/Behavior03/Behavior03-999982.pt
+results/runX32_01/Behavior03/Behavior03-1499989.onnx
+results/runX32_01/Behavior03/Behavior03-1499989.pt
+results/runX32_01/Behavior03/Behavior03-1999981.onnx
+results/runX32_01/Behavior03/Behavior03-1999981.pt
+results/runX32_01/Behavior03/Behavior03-2499998.onnx
+results/runX32_01/Behavior03/Behavior03-2499998.pt
+results/runX32_01/Behavior03/Behavior03-2999997.onnx
+results/runX32_01/Behavior03/Behavior03-2999997.pt
+results/runX32_01/Behavior03/Behavior03-3207343.onnx
+results/runX32_01/Behavior03/Behavior03-3207343.pt
+results/runX32_01/Behavior03/checkpoint.pt
+results/runX32_01/Behavior03/events.out.tfevents.1617408076.DESKTOP-TETRIS6.26720.0
+results/runX32_01/run_logs/timers.json
+results/runX32_01/run_logs/training_status.json
+results/Test01/Behavior03.onnx
+results/Test01/configuration.yaml
+results/Test01/Behavior03/Behavior03-13512.onnx
+results/Test01/Behavior03/Behavior03-13512.pt
+results/Test01/Behavior03/checkpoint.pt
+results/Test01/Behavior03/events.out.tfevents.1617542422.DESKTOP-TETRIS6.4660.0
+results/Test01/run_logs/timers.json
+results/Test01/run_logs/training_status.json
+results/Test02/Behavior03.onnx
+results/Test02/configuration.yaml
+results/Test02/Behavior03/Behavior03-12311.onnx
+results/Test02/Behavior03/Behavior03-12311.pt
+results/Test02/Behavior03/checkpoint.pt
+results/Test02/Behavior03/events.out.tfevents.1617542627.DESKTOP-TETRIS6.8204.0
+results/Test02/run_logs/timers.json
+results/Test02/run_logs/training_status.json
+results/Test03/Behavior03.onnx
+results/Test03/configuration.yaml
+results/Test03/Behavior03/Behavior03-12401.onnx
+results/Test03/Behavior03/Behavior03-12401.pt
+results/Test03/Behavior03/checkpoint.pt
+results/Test03/Behavior03/events.out.tfevents.1617542780.DESKTOP-TETRIS6.16168.0
+results/Test03/run_logs/timers.json
+results/Test03/run_logs/training_status.json
+results/Test04/Behavior03.onnx
+results/Test04/configuration.yaml
+results/Test04/Behavior03/Behavior03-770.onnx
+results/Test04/Behavior03/Behavior03-770.pt
+results/Test04/Behavior03/checkpoint.pt
+results/Test04/Behavior03/events.out.tfevents.1617542949.DESKTOP-TETRIS6.6268.0
+results/Test04/run_logs/timers.json
+results/Test04/run_logs/training_status.json
+results/Test05/Behavior03.onnx
+results/Test05/configuration.yaml
+results/Test05/Behavior03/Behavior03-3236.onnx
+results/Test05/Behavior03/Behavior03-3236.pt
+results/Test05/Behavior03/checkpoint.pt
+results/Test05/Behavior03/events.out.tfevents.1617543007.DESKTOP-TETRIS6.19336.0
+results/Test05/run_logs/timers.json
+results/Test05/run_logs/training_status.json
+ProjectSettings/AudioManager.asset
