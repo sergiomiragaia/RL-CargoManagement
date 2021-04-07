@@ -13,13 +13,17 @@ public class DebugController : MonoBehaviour
 
 	private StatsRecorder m_Recorder;
 
+	public int totalCargoCount = 0;
+	public int totalUnloadCount = 0;
+	public int totalFinishCount = 0;
+
 	public void Awake()
 	{
 		m_Recorder = Academy.Instance.StatsRecorder;
 	}
 	void Start() 
 	{
-		// Application.targetFrameRate = 300;
+		//Application.targetFrameRate = 60;
 
 		Transform[] Objects  = GetComponentsInChildren<Transform>();
 		foreach(Transform obj in Objects)
@@ -46,10 +50,13 @@ public class DebugController : MonoBehaviour
 			for (int i = 0; i < Agents.Count; i++)
 			{
 				m_Recorder.Add("Load Count", Agents[i].cargoCount, StatAggregationMethod.Average);
+				totalCargoCount += Agents[i].cargoCount;
 				Agents[i].cargoCount = 0;
 				m_Recorder.Add("Unload Count", Agents[i].unloadCount, StatAggregationMethod.Average);
+				totalUnloadCount += Agents[i].unloadCount;
 				Agents[i].unloadCount = 0;
 				m_Recorder.Add("Finish Count", Agents[i].finishCount, StatAggregationMethod.Average);
+				totalFinishCount += Agents[i].finishCount;
 				Agents[i].finishCount = 0;
 			}
 			for (int i = 0; i < sceneControllers.Count; i++)

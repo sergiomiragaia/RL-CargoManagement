@@ -68,6 +68,9 @@ public class CargoSpawnController : MonoBehaviour
 
 				CargoArea[randomSpawnPoint].body_collider = CargoArea[randomSpawnPoint].Cargo.GetComponentInChildren<MeshCollider>();
 				
+				Rigidbody rbody = CargoArea[randomSpawnPoint].Cargo.GetComponentInChildren<Rigidbody>();
+				rbody.constraints = RigidbodyConstraints.FreezeAll;
+
 				CargoController cargoController = CargoArea[randomSpawnPoint].Cargo.GetComponentInChildren<CargoController>();
 				cargoController.id = id;
 				sceneController.spawnedCargoes.Add(CargoArea[randomSpawnPoint].Cargo);

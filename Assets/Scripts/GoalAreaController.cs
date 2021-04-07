@@ -9,15 +9,8 @@ public class GoalAreaController : MonoBehaviour
 	private GameObject placementAreas;
 	[SerializeField] private SceneController SceneController;
 
-	public class CargoItem
-	{
-		public int id;
-		public Transform place;
-		public bool isPlaced;
-		public List<MeshRenderer> renders;
-	}
-
-	private List<CargoItem> GoalArea = new List<CargoItem>();
+	private List<GoalItem> GoalArea = new List<GoalItem>();
+	public int GoalAreaSize;
 	public bool isFull;
 
 	void Start()
@@ -28,7 +21,7 @@ public class GoalAreaController : MonoBehaviour
 		{
 			if(placementArea.CompareTag("unload_placement"))
 			{
-				GoalArea.Add(new CargoItem { 
+				GoalArea.Add(new GoalItem { 
 					id = -1, 
 					place = placementArea, 
 					isPlaced = false,
@@ -39,7 +32,7 @@ public class GoalAreaController : MonoBehaviour
 
 	public void resetArea()
 	{
-		foreach (CargoItem item in GoalArea)
+		foreach (GoalItem item in GoalArea)
 		{
 			item.id = -1;
 			item.isPlaced = false;
@@ -54,7 +47,7 @@ public class GoalAreaController : MonoBehaviour
 	public void addCargo(GameObject cargo)
 	{
 		CargoController cargoController = cargo.GetComponentInChildren<CargoController>();
-		foreach (CargoItem item in GoalArea)
+		foreach (GoalItem item in GoalArea)
 		{
 			if (item.isPlaced == false)
 			{
@@ -67,7 +60,7 @@ public class GoalAreaController : MonoBehaviour
 				break;
 			}
 		}
-		if (GoalArea.All(CargoItem => CargoItem.isPlaced))
+		if (GoalArea.All(GoalItem => GoalItem.isPlaced))
 		{
 			isFull = true;
 		}

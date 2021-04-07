@@ -1071,7 +1071,7 @@ GameObject:
   - component: {fileID: 9141774639206238090}
   - component: {fileID: 9162034156940905833}
   - component: {fileID: 97784207750021612}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: CargoSpawn
   m_TagString: load_area
   m_Icon: {fileID: 0}
@@ -1786,8 +1786,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5763357951842564644}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -35, y: 0.0005, z: -12.5}
-  m_LocalScale: {x: 0.5, y: 1, z: 2}
+  m_LocalPosition: {x: -35, y: 0.0005, z: -13.75}
+  m_LocalScale: {x: 1, y: 1, z: 1.75}
   m_Children: []
   m_Father: {fileID: 3756461567479150138}
   m_RootOrder: 2
@@ -2375,7 +2375,7 @@ MonoBehaviour:
   - cargo_connector
   - cargo0
   m_RaysPerDirection: 6
-  m_MaxRayDegrees: 180
+  m_MaxRayDegrees: 90
   m_SphereCastRadius: 0.5
   m_RayLength: 60
   m_RayLayerMask:
@@ -2415,7 +2415,7 @@ Transform:
   m_GameObject: {fileID: 8077598977993451157}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.0005, z: 0}
-  m_LocalScale: {x: 0.5, y: 1, z: 7.5}
+  m_LocalScale: {x: 1, y: 1, z: 8}
   m_Children: []
   m_Father: {fileID: 3756461567479150138}
   m_RootOrder: 1
@@ -2619,6 +2619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CargoTag: cargo0
   SceneController: {fileID: 796002221509255756}
+  GoalAreaSize: 0
   isFull: 0
 --- !u!1 &8420238946010791171
 GameObject:
@@ -2834,8 +2835,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8420238946089811264}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 35, y: 0.0005, z: 12.5}
-  m_LocalScale: {x: 0.5, y: 1, z: 2}
+  m_LocalPosition: {x: 35, y: 0.0005, z: 13.75}
+  m_LocalScale: {x: 1, y: 1, z: 1.75}
   m_Children: []
   m_Father: {fileID: 3756461567479150138}
   m_RootOrder: 0
@@ -2957,7 +2958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74442457dea695d479203b53220d149a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepSaturation: 2000000
+  stepSaturation: 5000000
   GoalAreas:
   - {fileID: 8420238945935976233}
   CargoAreas:
@@ -2983,6 +2984,7 @@ MonoBehaviour:
   - {fileID: 6538869800749624978}
   - {fileID: 6742487485460094231}
   simultaneousCargo: 3
+  targetCargo: 2
   step: 0
   agentPeriod: 0
   freeToLoad: 1
@@ -3186,10 +3188,10 @@ GameObject:
   - component: {fileID: 5029234134662571276}
   - component: {fileID: 8420238946475096282}
   - component: {fileID: 2386095559704901964}
+  - component: {fileID: 8690181957290949788}
   - component: {fileID: 2278216038776947259}
   - component: {fileID: 7482815813868821791}
   - component: {fileID: 7419696794703046177}
-  - component: {fileID: 8690181957290949788}
   m_Layer: 0
   m_Name: Agent
   m_TagString: tag_master
@@ -3283,6 +3285,33 @@ MonoBehaviour:
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
   m_EndVerticalOffset: 0
+--- !u!114 &8690181957290949788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8420238946475096262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: rayWall
+  m_DetectableTags:
+  - wall
+  m_RaysPerDirection: 6
+  m_MaxRayDegrees: 180
+  m_SphereCastRadius: 0.5
+  m_RayLength: 150
+  m_RayLayerMask:
+    serializedVersion: 2
+    m_Bits: 768
+  m_ObservationStacks: 2
+  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
+  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
+  m_StartVerticalOffset: 0
+  m_EndVerticalOffset: 0
 --- !u!114 &2278216038776947259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3332,14 +3361,14 @@ MonoBehaviour:
   maxMotorTorque: 800
   maxSteerAngle: 30
   maxBrakeTorque: 5000
-  maxBackwardSpeed: 10
+  maxBackwardSpeed: 5
   framesUpdateTarget: 50
   startDecisionPeriod: 50
-  endDecisionPeriod: 10
-  startMaxApprochSpeed: 10
-  endMaxApprochSpeed: 5
+  endDecisionPeriod: 5
+  startMaxApprochSpeed: 8
+  endMaxApprochSpeed: 4
   startMaxApprochAngle: 30
-  endMaxApprochAngle: 10
+  endMaxApprochAngle: 5
   startMaxApprochDistance: 2
   endMaxApprochDistance: 1
   wheelInfos:
@@ -3379,6 +3408,7 @@ MonoBehaviour:
   cargoCount: 0
   unloadCount: 0
   finishCount: 0
+  episodes: 0
 --- !u!114 &7419696794703046177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3393,33 +3423,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DecisionPeriod: 50
   TakeActionsBetweenDecisions: 0
---- !u!114 &8690181957290949788
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8420238946475096262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SensorName: rayWall
-  m_DetectableTags:
-  - wall
-  m_RaysPerDirection: 6
-  m_MaxRayDegrees: 180
-  m_SphereCastRadius: 0.5
-  m_RayLength: 150
-  m_RayLayerMask:
-    serializedVersion: 2
-    m_Bits: 768
-  m_ObservationStacks: 2
-  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
-  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 0
-  m_EndVerticalOffset: 0
 --- !u!1 &8420238947182871069
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,6 +16,7 @@ public class SceneController : MonoBehaviour
 	[SerializeField] private List<GameObject> walls;
 
 	[SerializeField] public int simultaneousCargo = 2;
+	[SerializeField] public int targetCargo = 2;
 	private int nextId = 0;
 	public int step;
 	public int agentPeriod = 0;
@@ -48,10 +49,6 @@ public class SceneController : MonoBehaviour
 	void FixedUpdate()
 	{
 		step++;
-	}
-
-	void Update()
-	{
 		if(freeToLoad)
 		{
 			foreach (GameObject CargoArea in CargoAreas)
@@ -68,8 +65,13 @@ public class SceneController : MonoBehaviour
 		{
 			agent.finishCount++;
 			// Debug.Log("EndEpisode - AllCargoAreasFilled");
-			agent.EndingEp(10f);
+			agent.EndingEp(0.5f);
 		}
+	}
+
+	void Update()
+	{
+
 	}
 
 	public GameObject loadCargo(Collider cargoCollider)
@@ -143,6 +145,6 @@ public class SceneController : MonoBehaviour
 
 	public bool AllGoalAreasFilled()
 	{
-		return GoalAreas.All(CargoArea => CargoArea.gameObject.GetComponent<GoalAreaController>().isFull);
+		return GoalAreas.All(GoalArea => GoalArea.gameObject.GetComponent<GoalAreaController>().isFull);
 	}
 }

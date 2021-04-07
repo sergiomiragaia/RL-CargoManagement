@@ -12,7 +12,7 @@ behaviors:
       num_epoch: 3
     network_settings:
       hidden_units: 512
-      normalize: false
+      normalize: true
       num_layers: 3
       vis_encode_type: simple
       memory:
@@ -32,14 +32,6 @@ behaviors:
             gamma: 0.99
             encoding_size: 128
             learning_rate: 3.0e-4
-        gail:
-          strength: 0.01
-          gamma: 0.99
-          encoding_size: 128
-          demo_path: Demo/Test_4.demo
-          learning_rate: 3.0e-4
-          use_actions: false
-          use_vail: false
 engine_settings:
   time_scale: 20
   no_graphics: true

@@ -37,4 +37,4 @@ engine_settings:
   no_graphics: true
 debug: false
 environment_parameters:
-  Initial_Step: 1000000.0
+  Initial_Step: 20000000.0

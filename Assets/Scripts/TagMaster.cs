@@ -7,9 +7,6 @@ using Unity.MLAgents.Actuators;
 using Random = UnityEngine.Random;
 using Unity.MLAgents.Sensors;
 
-
-
-
 public class TagMaster : Agent
 {
 	[SerializeField] private float maxMotorTorque = 400f;
@@ -73,6 +70,7 @@ public class TagMaster : Agent
 	public int cargoCount = 0;
 	public int unloadCount = 0;
 	public int finishCount = 0;
+	public int episodes = 0;
 
 	public override void Initialize()
 	{
@@ -104,7 +102,7 @@ public class TagMaster : Agent
 		
 		frames++;
 
-		AddReward(-1f / MaxStep);
+		AddReward(-0.5f / MaxStep);
 		float motor = maxMotorTorque * m_currentAcceleration;
 		float steering = maxSteerAngle * m_currentSteeringAngle;
 		float brake = maxBrakeTorque * m_currentBrakeTorque;
@@ -128,13 +126,13 @@ public class TagMaster : Agent
 	public void EndingEp(float reward)
 	{
 		AddReward(reward);
-		// Debug.Log("End total_reward = " + total_reward);
+		Debug.Log("Cumulative Reward = " + GetCumulativeReward());
 		EndEpisode();
 	}
 
 	public int updateDecionRequest(float unclampedRatio)
 	{
-		float ratio = Mathf.Clamp(unclampedRatio / 1.5f, 0f, 1f);
+		float ratio = Mathf.Clamp(unclampedRatio / 1f, 0f, 1f);
 		DecisionRequester decisionRequester = GetComponent<DecisionRequester>();
 		int period = (int)(endDecisionPeriod * ratio + startDecisionPeriod * (1 - ratio));
 		decisionRequester.DecisionPeriod = period;
@@ -228,6 +226,7 @@ public class TagMaster : Agent
 	}
 	public override void OnEpisodeBegin()
 	{
+		episodes++;
 		sceneController.ResetArea();
 
 		frames = 0;
@@ -254,7 +253,7 @@ public class TagMaster : Agent
 		//if (other.gameObject) return;
 		if (isCarryingCargo && other.gameObject.CompareTag("lane"))
 		{
-			AddReward(0.9f / MaxStep);
+			AddReward(0.4f / MaxStep);
 		}
 	}
 	private void OnTriggerEnter(Collider other)
@@ -263,7 +262,7 @@ public class TagMaster : Agent
 		//if (other.CompareTag("human"))
 		//{
 		//	Debug.Log("Hit human");
-		//	EndingEp(-1f);
+		//	EndingEp(-0.5f);
 		//}
 
 		if (other.CompareTag("load_area"))
@@ -286,29 +285,19 @@ public class TagMaster : Agent
 				else
 				{
 					// Debug.Log("Failed pick up");
-					EndingEp(-1f);
+					EndingEp(-0.5f);
 				}
 			}
 		}
 
 		if (isCarryingCargo && other.CompareTag("unload_area"))
 		{
-			//Debug.Log("unload cargo");
-			unloadCount++;
-			AddReward(3f);
-			CargoController cargoController = carriedCargo.GetComponentInChildren<CargoController>();
-			cargoController.resetCargo();
-			GoalAreaController GoalArea = other.GetComponent<GoalAreaController>();
-			GoalArea.addCargo(carriedCargo);
-			sceneController.spawnedCargoes.Remove(carriedCargo);
-			Destroy(carriedCargo);
-			isCarryingCargo = false;
-			nearestCargo = null;
+			unloadCargo(other);
 		}
 
 		if (isCarryingCargo && other.gameObject.CompareTag("lane"))
 		{
-			AddReward(0.5f / MaxStep);
+			AddReward(0.4f / MaxStep);
 		}
 	}
 
@@ -324,12 +313,12 @@ public class TagMaster : Agent
 		if (other.gameObject.CompareTag("wall"))
 		{
 			// Debug.Log("Hit wall");
-			EndingEp(-1f);
+			EndingEp(-0.5f);
 		}
 		if (other.gameObject.CompareTag("cargo0"))
 		{
 			// Debug.Log("Hit cargo");
-			EndingEp(-1f);
+			EndingEp(-0.5f);
 		}
 	}
 	private void pickUpCargo(Collider other)
@@ -342,12 +331,30 @@ public class TagMaster : Agent
 		StartCoroutine("freeze");
 		cargoController.attachToMaster(transform.gameObject);
 		rBody.constraints = RigidbodyConstraints.None;
-		AddReward(2f);
+		AddReward(0.4f * 0.5f/sceneController.targetCargo);
+
+		nearestUnloadArea = findNearestUnloadArea();
 	}
 
 	IEnumerator freeze() 
 	{
 		yield return new WaitForSeconds(Time.deltaTime);
+	}
+
+	private void unloadCargo(Collider other)
+	{
+		//Debug.Log("unload cargo");
+		unloadCount++;
+		CargoController cargoController = carriedCargo.GetComponentInChildren<CargoController>();
+		cargoController.resetCargo();
+		GoalAreaController GoalArea = other.GetComponent<GoalAreaController>();
+		GoalArea.addCargo(carriedCargo);
+		sceneController.spawnedCargoes.Remove(carriedCargo);
+		Destroy(carriedCargo);
+		isCarryingCargo = false;
+		AddReward(0.6f * 0.25f/sceneController.targetCargo);
+
+		nearestCargo = findNearestCargo();
 	}
 
 	private bool checkAllignment(Collider other)

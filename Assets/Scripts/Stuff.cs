@@ -37,3 +37,11 @@ public class CargoItem
 	public MeshCollider body_collider;
 	public GameObject Cargo;
 }
+
+public class GoalItem
+{
+	public int id;
+	public Transform place;
+	public bool isPlaced;
+	public List<MeshRenderer> renders;
+}
