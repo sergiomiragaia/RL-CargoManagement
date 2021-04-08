@@ -68,7 +68,7 @@ public class CargoController : MonoBehaviour
 			if (Agent != null)
 			{
 				// Debug.Log("Cargo hit wall");
-				Agent.EndingEp(-0.5f);
+				Agent.EndingEp(Agent.failReward);
 			}
 		}
 		if (other.gameObject.CompareTag("cargo0"))
@@ -76,7 +76,7 @@ public class CargoController : MonoBehaviour
 			if (Agent != null) // && other.gameObject != transform.gameObject
 			{
 				// Debug.Log("Cargo hit cargo");
-				Agent.EndingEp(-0.5f);
+				Agent.EndingEp(Agent.failReward);
 			}
 		}
 	}

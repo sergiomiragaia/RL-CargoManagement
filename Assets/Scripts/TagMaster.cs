@@ -72,10 +72,24 @@ public class TagMaster : Agent
 	public int finishCount = 0;
 	public int episodes = 0;
 
+	private float stepReward;
+	private float laneReward;
+	public float failReward;
+	public float successReward;
+	private float loadReward;
+	private float unloadReward;
+
 	public override void Initialize()
 	{
 		base.Initialize();
 		rBody = GetComponent<Rigidbody>();
+
+		stepReward = -0.5f / MaxStep;
+		laneReward = -0.3f / MaxStep;
+		failReward = -0.5f;
+		successReward = 1f;
+		loadReward = 0.2f * 0.75f/sceneController.targetCargo;
+		unloadReward = 0.8f * 0.75f/sceneController.targetCargo;
 	}
 
 	private void Start()
@@ -102,7 +116,7 @@ public class TagMaster : Agent
 		
 		frames++;
 
-		AddReward(-0.5f / MaxStep);
+		AddReward(stepReward);
 		float motor = maxMotorTorque * m_currentAcceleration;
 		float steering = maxSteerAngle * m_currentSteeringAngle;
 		float brake = maxBrakeTorque * m_currentBrakeTorque;
@@ -126,13 +140,20 @@ public class TagMaster : Agent
 	public void EndingEp(float reward)
 	{
 		AddReward(reward);
-		Debug.Log("Cumulative Reward = " + GetCumulativeReward());
+		// Debug.Log("Cumulative Reward = " + GetCumulativeReward());
+		EndEpisode();
+	}
+	public void EndingEp(float reward, bool setReward)
+	{
+		if (setReward) SetReward(reward);
+		else AddReward(reward);
+		// Debug.Log("Cumulative Reward = " + GetCumulativeReward());
 		EndEpisode();
 	}
 
 	public int updateDecionRequest(float unclampedRatio)
 	{
-		float ratio = Mathf.Clamp(unclampedRatio / 1f, 0f, 1f);
+		float ratio = Mathf.Sqrt(Mathf.Clamp(unclampedRatio / 1.5f, 0f, 1f));
 		DecisionRequester decisionRequester = GetComponent<DecisionRequester>();
 		int period = (int)(endDecisionPeriod * ratio + startDecisionPeriod * (1 - ratio));
 		decisionRequester.DecisionPeriod = period;
@@ -253,7 +274,7 @@ public class TagMaster : Agent
 		//if (other.gameObject) return;
 		if (isCarryingCargo && other.gameObject.CompareTag("lane"))
 		{
-			AddReward(0.4f / MaxStep);
+			AddReward(laneReward);
 		}
 	}
 	private void OnTriggerEnter(Collider other)
@@ -262,7 +283,7 @@ public class TagMaster : Agent
 		//if (other.CompareTag("human"))
 		//{
 		//	Debug.Log("Hit human");
-		//	EndingEp(-0.5f);
+		//	EndingEp(failReward);
 		//}
 
 		if (other.CompareTag("load_area"))
@@ -274,18 +295,18 @@ public class TagMaster : Agent
 		{
 			if (simplePickUp)
 			{
-				pickUpCargo(other);
+				loadCargo(other);
 			}
 			else 
 			{
 				if( checkAllignment(other) )
 				{
-					pickUpCargo(other);
+					loadCargo(other);
 				}
 				else
 				{
 					// Debug.Log("Failed pick up");
-					EndingEp(-0.5f);
+					EndingEp(failReward);
 				}
 			}
 		}
@@ -297,7 +318,7 @@ public class TagMaster : Agent
 
 		if (isCarryingCargo && other.gameObject.CompareTag("lane"))
 		{
-			AddReward(0.4f / MaxStep);
+			AddReward(laneReward);
 		}
 	}
 
@@ -313,15 +334,15 @@ public class TagMaster : Agent
 		if (other.gameObject.CompareTag("wall"))
 		{
 			// Debug.Log("Hit wall");
-			EndingEp(-0.5f);
+			EndingEp(failReward);
 		}
 		if (other.gameObject.CompareTag("cargo0"))
 		{
 			// Debug.Log("Hit cargo");
-			EndingEp(-0.5f);
+			EndingEp(failReward);
 		}
 	}
-	private void pickUpCargo(Collider other)
+	private void loadCargo(Collider other)
 	{
 		cargoCount++;
 		carriedCargo = sceneController.loadCargo(other);
@@ -331,7 +352,7 @@ public class TagMaster : Agent
 		StartCoroutine("freeze");
 		cargoController.attachToMaster(transform.gameObject);
 		rBody.constraints = RigidbodyConstraints.None;
-		AddReward(0.4f * 0.5f/sceneController.targetCargo);
+		AddReward(loadReward);
 
 		nearestUnloadArea = findNearestUnloadArea();
 	}
@@ -352,7 +373,7 @@ public class TagMaster : Agent
 		sceneController.spawnedCargoes.Remove(carriedCargo);
 		Destroy(carriedCargo);
 		isCarryingCargo = false;
-		AddReward(0.6f * 0.25f/sceneController.targetCargo);
+		AddReward(unloadReward);
 
 		nearestCargo = findNearestCargo();
 	}

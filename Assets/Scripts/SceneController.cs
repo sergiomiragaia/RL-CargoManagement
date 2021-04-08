@@ -65,7 +65,7 @@ public class SceneController : MonoBehaviour
 		{
 			agent.finishCount++;
 			// Debug.Log("EndEpisode - AllCargoAreasFilled");
-			agent.EndingEp(0.5f);
+			agent.EndingEp(agent.successReward,true);
 		}
 	}
 

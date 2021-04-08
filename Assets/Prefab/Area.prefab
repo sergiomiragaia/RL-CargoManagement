@@ -2374,8 +2374,8 @@ MonoBehaviour:
   m_DetectableTags:
   - cargo_connector
   - cargo0
-  m_RaysPerDirection: 6
-  m_MaxRayDegrees: 90
+  m_RaysPerDirection: 8
+  m_MaxRayDegrees: 60
   m_SphereCastRadius: 0.5
   m_RayLength: 60
   m_RayLayerMask:
@@ -2958,7 +2958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74442457dea695d479203b53220d149a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepSaturation: 5000000
+  stepSaturation: 2000000
   GoalAreas:
   - {fileID: 8420238945935976233}
   CargoAreas:
@@ -3334,7 +3334,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: c8ca98e4aa3cd8347a4bf3f0d64e94ea, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: Behavior01
@@ -3364,7 +3364,7 @@ MonoBehaviour:
   maxBackwardSpeed: 5
   framesUpdateTarget: 50
   startDecisionPeriod: 50
-  endDecisionPeriod: 5
+  endDecisionPeriod: 15
   startMaxApprochSpeed: 8
   endMaxApprochSpeed: 4
   startMaxApprochAngle: 30
@@ -3409,6 +3409,8 @@ MonoBehaviour:
   unloadCount: 0
   finishCount: 0
   episodes: 0
+  failReward: 0
+  successReward: 0
 --- !u!114 &7419696794703046177
 MonoBehaviour:
   m_ObjectHideFlags: 0
