@@ -5,17 +5,16 @@ using Unity.MLAgents;
 
 public class DebugController : MonoBehaviour
 {
-	private List<TagMaster> Agents = new List<TagMaster>();
-	private List<SceneController> sceneControllers = new List<SceneController>();
-
-	private int frames;
+	private List<TagMaster> m_Agents = new List<TagMaster>();
+	private List<SceneController> m_sceneControllers = new List<SceneController>();
+	private int m_frames;
 	public int updateRate = 1000;
 
 	private StatsRecorder m_Recorder;
 
-	public int totalCargoCount = 0;
-	public int totalUnloadCount = 0;
-	public int totalFinishCount = 0;
+	private int m_totalCargoCount = 0;
+	private int m_totalUnloadCount = 0;
+	private int m_totalFinishCount = 0;
 
 	public void Awake()
 	{
@@ -23,7 +22,7 @@ public class DebugController : MonoBehaviour
 	}
 	void Start() 
 	{
-		//Application.targetFrameRate = 60;
+		// Application.targetFrameRate = 60;
 
 		Transform[] Objects  = GetComponentsInChildren<Transform>();
 		foreach(Transform obj in Objects)
@@ -31,38 +30,32 @@ public class DebugController : MonoBehaviour
 			if(obj.CompareTag("tag_master"))
 			{
 				TagMaster agent = obj.GetComponent<TagMaster>();
-				Agents.Add(agent);
+				m_Agents.Add(agent);
 			}
 			if(obj.CompareTag("scene"))
 			{
 				SceneController scene = obj.GetComponent<SceneController>();
-				sceneControllers.Add(scene);
+				m_sceneControllers.Add(scene);
 			}
 		}
 	}
 
 	void FixedUpdate()
 	{
-		frames++;
-		if (frames % (Mathf.Round(updateRate)) == 0)
+		m_frames++;
+		if (m_frames % (Mathf.Round(updateRate)) == 0)
 		{
-			//Debug.Log(frames);
-			for (int i = 0; i < Agents.Count; i++)
+			for (int i = 0; i < m_Agents.Count; i++)
 			{
-				m_Recorder.Add("Load Count", Agents[i].cargoCount, StatAggregationMethod.Average);
-				totalCargoCount += Agents[i].cargoCount;
-				Agents[i].cargoCount = 0;
-				m_Recorder.Add("Unload Count", Agents[i].unloadCount, StatAggregationMethod.Average);
-				totalUnloadCount += Agents[i].unloadCount;
-				Agents[i].unloadCount = 0;
-				m_Recorder.Add("Finish Count", Agents[i].finishCount, StatAggregationMethod.Average);
-				totalFinishCount += Agents[i].finishCount;
-				Agents[i].finishCount = 0;
-			}
-			for (int i = 0; i < sceneControllers.Count; i++)
-			{
-				m_Recorder.Add("Current Ratio", sceneControllers[i].currentRatio, StatAggregationMethod.Average);
-				m_Recorder.Add("Agent Period", sceneControllers[i].agentPeriod, StatAggregationMethod.Average);
+				m_Recorder.Add("Achivements/Load Count", m_Agents[i].cargoCount, StatAggregationMethod.Average);
+				m_totalCargoCount += m_Agents[i].cargoCount;
+				m_Agents[i].cargoCount = 0;
+				m_Recorder.Add("Achivements/Unload Count", m_Agents[i].unloadCount, StatAggregationMethod.Average);
+				m_totalUnloadCount += m_Agents[i].unloadCount;
+				m_Agents[i].unloadCount = 0;
+				m_Recorder.Add("Achivements/Finish Count", m_Agents[i].finishCount, StatAggregationMethod.Average);
+				m_totalFinishCount += m_Agents[i].finishCount;
+				m_Agents[i].finishCount = 0;
 			}
 		}
 	}

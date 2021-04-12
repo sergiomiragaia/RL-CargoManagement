@@ -36,5 +36,3 @@ engine_settings:
   time_scale: 20
   no_graphics: true
 debug: false
-environment_parameters:
-  Initial_Step: 0.0

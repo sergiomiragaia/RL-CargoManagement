@@ -12,21 +12,40 @@ public class TagMaster : Agent
 	[SerializeField] private float maxMotorTorque = 400f;
 	[SerializeField] private float maxSteerAngle = 30f;
 	[SerializeField] private float maxBrakeTorque = 200f;
-	[SerializeField] private float maxBackwardSpeed = 10f;
+	[SerializeField] public float maxBackwardSpeed = 10f;
 	[SerializeField] private int framesUpdateTarget = 1000;
-	[SerializeField] private int startDecisionPeriod = 50;
-	[SerializeField] private int endDecisionPeriod = 5;
-	[SerializeField] public float startMaxApprochSpeed = 10f;
-	[SerializeField] public float endMaxApprochSpeed = 5f;
-	[SerializeField] public float startMaxApprochAngle = 30f;
-	[SerializeField] public float endMaxApprochAngle = 10f;
-	[SerializeField] public float startMaxApprochDistance = 2f;
-	[SerializeField] public float endMaxApprochDistance = 1f;
-	
-	[SerializeField] public List<Wheel> wheelInfos; 
-	[SerializeField] public bool simplePickUp = true;
-	[SerializeField] public Transform tailConnector;
+	[SerializeField] private List<Wheel> wheelInfos; 
+	[SerializeField] private bool simplePickUp = true;
+	[SerializeField] private Transform tailConnector;
 	[SerializeField] private SceneController sceneController;
+
+	private int m_frames = 0;
+	[HideInInspector] public int m_actions = 0;
+	private bool isCarryingCargo = false;
+	private float m_currentSteeringAngle = 0f;
+	private float m_currentAcceleration = 0f;
+	private float m_currentBrakeTorque = 0f;
+	private float m_currentSpeed = 0f;
+	private Rigidbody m_rBody;
+	private GameObject m_carriedCargo;
+	private GameObject m_nearestCargo = null;
+	private GameObject m_nearestUnloadArea = null;
+	private int m_CarriedCargoID;
+
+	public int cargoCount = 0;
+	public int unloadCount = 0;
+	public int finishCount = 0;
+	public int episodes = 0;
+
+	private int m_period;
+	private float m_stepReward;
+	private float m_laneReward;
+	private float m_backwardsReward;
+	private float m_failReward;
+	private float m_successReward;
+	private float m_loadReward;
+	private float m_unloadReward;
+	//public bool onLane = false;
 
 	public float CurrentAcceleration
 	{
@@ -54,42 +73,41 @@ public class TagMaster : Agent
 		get => m_currentSpeed;
 		set => m_currentSpeed = Mathf.Round(100f * value)/100f;
 	}
+	
+	public float MaxApprochSpeed
+	{
+		get; set;
+	}
+	
+	public float MaxApprochAngle
+	{
+		get; set;
+	}
+	
+	public float MaxApprochDistance
+	{
+		get; set;
+	}
 
-	private bool isCarryingCargo = false;
-	private float m_currentSteeringAngle = 0f;
-	private float m_currentAcceleration = 0f;
-	private float m_currentBrakeTorque = 0f;
-	private float m_currentSpeed = 0f;
-	private Rigidbody rBody;
-	private GameObject carriedCargo;
-	private GameObject nearestCargo = null;
-	private GameObject nearestUnloadArea = null;
-	private int CarriedCargoID;
-
-	private int frames = 0;
-	public int cargoCount = 0;
-	public int unloadCount = 0;
-	public int finishCount = 0;
-	public int episodes = 0;
-
-	private float stepReward;
-	private float laneReward;
-	public float failReward;
-	public float successReward;
-	private float loadReward;
-	private float unloadReward;
+	public float FailReward
+	{
+		get => m_failReward;//(m_failReward * (1 - (float)m_actions/(float)MaxStep));
+	}
+	public float SuccessReward
+	{
+		get => m_successReward;
+	}
 
 	public override void Initialize()
 	{
 		base.Initialize();
-		rBody = GetComponent<Rigidbody>();
+		m_rBody = GetComponent<Rigidbody>();
 
-		stepReward = -0.5f / MaxStep;
-		laneReward = -0.3f / MaxStep;
-		failReward = -0.5f;
-		successReward = 1f;
-		loadReward = 0.2f * 0.75f/sceneController.targetCargo;
-		unloadReward = 0.8f * 0.75f/sceneController.targetCargo;
+		m_failReward = -0.5f;
+		m_successReward = 0.1f;
+		m_loadReward = 0.2f * (1f - m_successReward)/sceneController.targetCargo;
+		m_unloadReward = 0.8f * (1f - m_successReward)/sceneController.targetCargo;
+		m_laneReward = 0.3f / MaxStep;
 	}
 
 	private void Start()
@@ -105,18 +123,17 @@ public class TagMaster : Agent
 	private void FixedUpdate()
 	{
 
-		if((nearestCargo == null || frames % framesUpdateTarget==0) && !isCarryingCargo)
+		if((m_nearestCargo == null || m_frames % framesUpdateTarget==0) && !isCarryingCargo)
 		{
-			nearestCargo = findNearestCargo();
+			m_nearestCargo = findNearestCargo();
 		}
-		if((nearestUnloadArea == null || frames % framesUpdateTarget==0) && isCarryingCargo)
+		if((m_nearestUnloadArea == null || m_frames % framesUpdateTarget==0) && isCarryingCargo)
 		{
-			nearestUnloadArea = findNearestUnloadArea();
+			m_nearestUnloadArea = findNearestUnloadArea();
 		}
 		
-		frames++;
+		m_frames++;
 
-		AddReward(stepReward);
 		float motor = maxMotorTorque * m_currentAcceleration;
 		float steering = maxSteerAngle * m_currentSteeringAngle;
 		float brake = maxBrakeTorque * m_currentBrakeTorque;
@@ -140,24 +157,25 @@ public class TagMaster : Agent
 	public void EndingEp(float reward)
 	{
 		AddReward(reward);
-		// Debug.Log("Cumulative Reward = " + GetCumulativeReward());
+		Debug.Log("Final Reward = " + GetCumulativeReward() + " | Actions = " + m_actions);
 		EndEpisode();
 	}
-	public void EndingEp(float reward, bool setReward)
+	public void EndingEp(bool isFail)
 	{
-		if (setReward) SetReward(reward);
-		else AddReward(reward);
-		// Debug.Log("Cumulative Reward = " + GetCumulativeReward());
+		float cumulativeReward = GetCumulativeReward();
+		if (isFail) AddReward(m_failReward - cumulativeReward);
+		else AddReward(m_successReward - cumulativeReward);
+		Debug.Log("Final Reward = " + GetCumulativeReward() + " | Actions = " + m_actions);
 		EndEpisode();
 	}
 
-	public int updateDecionRequest(float unclampedRatio)
+	public void updateDecionRequest(int period)
 	{
-		float ratio = Mathf.Sqrt(Mathf.Clamp(unclampedRatio / 1.5f, 0f, 1f));
+		m_period = period;
+		m_stepReward = 0.9f * (-1f - m_failReward) / (MaxStep/m_period);
+		m_backwardsReward = 0.1f * (-1f - m_failReward) / (MaxStep/m_period);
 		DecisionRequester decisionRequester = GetComponent<DecisionRequester>();
-		int period = (int)(endDecisionPeriod * ratio + startDecisionPeriod * (1 - ratio));
 		decisionRequester.DecisionPeriod = period;
-		return period;
 	}
 
 	public override void CollectObservations(VectorSensor sensor)
@@ -166,7 +184,7 @@ public class TagMaster : Agent
 		sensor.AddObservation(isCarryingCargo);
 
 		//Nearest Cargo
-		if (nearestCargo == null)
+		if (m_nearestCargo == null)
 		{
 			float[] sensors = new float[5];
 			sensors[0] = 0f;
@@ -178,7 +196,7 @@ public class TagMaster : Agent
 		}
 		else
 		{
-			CargoController nearestCargoController = nearestCargo.GetComponentInChildren<CargoController>();
+			CargoController nearestCargoController = m_nearestCargo.GetComponentInChildren<CargoController>();
 			Vector3 toCargo = nearestCargoController.hingeTransform.position - tailConnector.position;
 			// 3 observation
 			sensor.AddObservation(toCargo.normalized);
@@ -189,7 +207,7 @@ public class TagMaster : Agent
 		}
 
 		//Nearest Unload Area
-		if (nearestUnloadArea == null)
+		if (m_nearestUnloadArea == null)
 		{
 			float[] sensors = new float[3];
 			sensors[0] = 0f;
@@ -199,7 +217,7 @@ public class TagMaster : Agent
 		}
 		else
 		{
-			Vector3 toUnloadArea = nearestUnloadArea.transform.position - transform.position;
+			Vector3 toUnloadArea = m_nearestUnloadArea.transform.position - transform.position;
 			// 3 observation
 			sensor.AddObservation(toUnloadArea.normalized);
 		}
@@ -207,8 +225,11 @@ public class TagMaster : Agent
 
 	public override void OnActionReceived(ActionBuffers actionBuffers)
 	{
+		m_actions++;
+		AddReward(m_stepReward);
+		Debug.Log("Cumulative Reward = " + GetCumulativeReward() + " | Actions = " + m_actions);
 		
-		CurrentSpeed = Vector3.Dot(rBody.velocity, transform.forward);
+		CurrentSpeed = Vector3.Dot(m_rBody.velocity, transform.forward);
 
 		if((actionBuffers.ContinuousActions[0] >= 0 && CurrentSpeed >= 0))
 		{
@@ -221,6 +242,7 @@ public class TagMaster : Agent
 			// Debug.Log("Accelerate backward");
 			CurrentAcceleration = (1 + Mathf.Clamp(CurrentSpeed/maxBackwardSpeed,-1f,0f)) * actionBuffers.ContinuousActions[0];
 			CurrentBrakeTorque = 0f;
+			AddReward(m_backwardsReward);
 		}
 		else
 		{
@@ -247,34 +269,42 @@ public class TagMaster : Agent
 	}
 	public override void OnEpisodeBegin()
 	{
+
 		episodes++;
 		sceneController.ResetArea();
 
-		frames = 0;
-		rBody.velocity = Vector3.zero;
-		rBody.angularVelocity = Vector3.zero;
+		m_frames = 0;
+		m_actions = 0;
+
+		m_rBody.constraints = RigidbodyConstraints.FreezeAll;
+		foreach(Wheel wheel in wheelInfos)
+		{
+			wheel.collider.brakeTorque = Mathf.Infinity;
+			wheel.collider.steerAngle = 0f;
+		}
+		StartCoroutine("freeze");
+		m_rBody.constraints = RigidbodyConstraints.None;
+
 		m_currentSteeringAngle = 0f;
 		m_currentAcceleration = 0f;
 		m_currentBrakeTorque = 0f;
 		m_currentSpeed = 0f;
 		if (isCarryingCargo)
 		{			
-			CargoController cargoController = carriedCargo.GetComponentInChildren<CargoController>();
+			CargoController cargoController = m_carriedCargo.GetComponentInChildren<CargoController>();
 			cargoController.resetCargo();
-			sceneController.spawnedCargoes.Remove(carriedCargo);
-			Destroy(carriedCargo);
+			sceneController.spawnedCargoes.Remove(m_carriedCargo);
+			Destroy(m_carriedCargo);
 			isCarryingCargo = false;
 		}
-
 		// Debug.Log("Episode begin");
 	}
 
 	private void OnTriggerStay(Collider other)
 	{
-		//if (other.gameObject) return;
 		if (isCarryingCargo && other.gameObject.CompareTag("lane"))
 		{
-			AddReward(laneReward);
+			AddReward(m_laneReward);
 		}
 	}
 	private void OnTriggerEnter(Collider other)
@@ -283,12 +313,12 @@ public class TagMaster : Agent
 		//if (other.CompareTag("human"))
 		//{
 		//	Debug.Log("Hit human");
-		//	EndingEp(failReward);
+		//	EndingEp(FailReward);
 		//}
 
 		if (other.CompareTag("load_area"))
 		{
-			sceneController.freeToLoad = false;
+			sceneController.m_freeToLoad = false;
 		}
 
 		if (!isCarryingCargo && other.CompareTag("cargo_connector"))
@@ -306,19 +336,19 @@ public class TagMaster : Agent
 				else
 				{
 					// Debug.Log("Failed pick up");
-					EndingEp(failReward);
+					EndingEp(FailReward);
 				}
 			}
+		}
+
+		if (isCarryingCargo && other.gameObject.CompareTag("lane"))
+		{
+			AddReward(m_laneReward);
 		}
 
 		if (isCarryingCargo && other.CompareTag("unload_area"))
 		{
 			unloadCargo(other);
-		}
-
-		if (isCarryingCargo && other.gameObject.CompareTag("lane"))
-		{
-			AddReward(laneReward);
 		}
 	}
 
@@ -326,7 +356,12 @@ public class TagMaster : Agent
 	{
 		if (other.CompareTag("load_area"))
 		{
-			sceneController.freeToLoad = true;
+			sceneController.m_freeToLoad = true;
+		}
+
+		if (isCarryingCargo && other.gameObject.CompareTag("lane"))
+		{
+			//onLane = false;
 		}
 	}
 	private void OnCollisionEnter(Collision other)
@@ -334,27 +369,27 @@ public class TagMaster : Agent
 		if (other.gameObject.CompareTag("wall"))
 		{
 			// Debug.Log("Hit wall");
-			EndingEp(failReward);
+			EndingEp(FailReward);
 		}
 		if (other.gameObject.CompareTag("cargo0"))
 		{
 			// Debug.Log("Hit cargo");
-			EndingEp(failReward);
+			EndingEp(FailReward);
 		}
 	}
 	private void loadCargo(Collider other)
 	{
 		cargoCount++;
-		carriedCargo = sceneController.loadCargo(other);
+		m_carriedCargo = sceneController.loadCargo(other);
 		isCarryingCargo = true;
-		CargoController cargoController = carriedCargo.GetComponentInChildren<CargoController>();
-		rBody.constraints = RigidbodyConstraints.FreezeAll;
+		CargoController cargoController = m_carriedCargo.GetComponentInChildren<CargoController>();
+		m_rBody.constraints = RigidbodyConstraints.FreezeAll;
 		StartCoroutine("freeze");
 		cargoController.attachToMaster(transform.gameObject);
-		rBody.constraints = RigidbodyConstraints.None;
-		AddReward(loadReward);
+		m_rBody.constraints = RigidbodyConstraints.None;
+		AddReward(m_loadReward);
 
-		nearestUnloadArea = findNearestUnloadArea();
+		m_nearestUnloadArea = findNearestUnloadArea();
 	}
 
 	IEnumerator freeze() 
@@ -366,35 +401,32 @@ public class TagMaster : Agent
 	{
 		//Debug.Log("unload cargo");
 		unloadCount++;
-		CargoController cargoController = carriedCargo.GetComponentInChildren<CargoController>();
+		CargoController cargoController = m_carriedCargo.GetComponentInChildren<CargoController>();
 		cargoController.resetCargo();
 		GoalAreaController GoalArea = other.GetComponent<GoalAreaController>();
-		GoalArea.addCargo(carriedCargo);
-		sceneController.spawnedCargoes.Remove(carriedCargo);
-		Destroy(carriedCargo);
+		GoalArea.addCargo(m_carriedCargo);
+		sceneController.spawnedCargoes.Remove(m_carriedCargo);
+		Destroy(m_carriedCargo);
 		isCarryingCargo = false;
-		AddReward(unloadReward);
+		AddReward(m_unloadReward);
 
-		nearestCargo = findNearestCargo();
+		m_nearestCargo = findNearestCargo();
 	}
 
 	private bool checkAllignment(Collider other)
 	{
 		// Max speed
-		float maxSpeed = endMaxApprochSpeed * sceneController.currentRatio + startMaxApprochSpeed * (1 - sceneController.currentRatio);
-		if (rBody.velocity.magnitude > (maxSpeed)) return false;
+		//if (m_rBody.velocity.magnitude > MaxApprochSpeed) return false;
 
 		// Max angle
-		float maxAngle = endMaxApprochAngle * sceneController.currentRatio + startMaxApprochAngle * (1 - sceneController.currentRatio);
 		Vector3 pickUpFace = other.transform.forward.normalized;
 		float angle = Vector3.Angle(pickUpFace, transform.forward);
-		if (Mathf.Abs(angle) > maxAngle) return false;
+		if (Mathf.Abs(angle) > MaxApprochAngle) return false;
 
 		// Max axis distance
-		float maxDistance = endMaxApprochDistance * sceneController.currentRatio + startMaxApprochDistance * (1 - sceneController.currentRatio);
 		Vector3 d = transform.position - other.transform.position;
 		Vector3 projX = Vector3.Project(d, transform.right.normalized);
-		if (Mathf.Abs(projX.magnitude) > maxDistance) return false;
+		if (Mathf.Abs(projX.magnitude) > MaxApprochDistance) return false;
 
 		return true;
 	}

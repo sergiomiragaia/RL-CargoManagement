@@ -7,10 +7,10 @@ public class CargoController : MonoBehaviour
 	public int id;
 	public GameObject Connector_model;
 	private GameObject connector = null;
-	private HingeJoint hinge1;
-	private HingeJoint hinge2;
+	private HingeJoint m_hinge1;
+	private HingeJoint m_hinge2;
 	public Transform hingeTransform;
-	private TagMaster Agent = null;
+	private TagMaster m_agent = null;
 
 	private void Start()
 	{
@@ -19,25 +19,25 @@ public class CargoController : MonoBehaviour
 
 	public void attachToMaster(GameObject agent)
 	{
-		Agent = agent.GetComponent<TagMaster>();
+		m_agent = agent.GetComponent<TagMaster>();
 		// Debug.Log("Attach");
 
 		Rigidbody rbody = transform.gameObject.GetComponent<Rigidbody>();
 		rbody.constraints = RigidbodyConstraints.None;
 
-		hinge1 = transform.gameObject.AddComponent<HingeJoint>();
-		hinge1.anchor = hingeTransform.localPosition;
-		hinge1.axis = new Vector3(1f, 0f, 0f);
-		hinge1.autoConfigureConnectedAnchor = false;
-		hinge1.enableCollision = true;
-		hinge1.connectedAnchor = new Vector3(0f, 0.64f, 0f);
+		m_hinge1 = transform.gameObject.AddComponent<HingeJoint>();
+		m_hinge1.anchor = hingeTransform.localPosition;
+		m_hinge1.axis = new Vector3(1f, 0f, 0f);
+		m_hinge1.autoConfigureConnectedAnchor = false;
+		m_hinge1.enableCollision = true;
+		m_hinge1.connectedAnchor = new Vector3(0f, 0.64f, 0f);
 
 		connector = Instantiate(Connector_model, hingeTransform.position, hingeTransform.rotation);
-		hinge1.connectedBody = connector.GetComponent<Rigidbody>();
-		hinge2 = connector.GetComponent<HingeJoint>();
-		hinge2.connectedBody = agent.GetComponent<Rigidbody>();
-		hinge2.autoConfigureConnectedAnchor = false;
-		hinge2.connectedAnchor = new Vector3(0f, 0.36f, -3.4f);
+		m_hinge1.connectedBody = connector.GetComponent<Rigidbody>();
+		m_hinge2 = connector.GetComponent<HingeJoint>();
+		m_hinge2.connectedBody = agent.GetComponent<Rigidbody>();
+		m_hinge2.autoConfigureConnectedAnchor = false;
+		m_hinge2.connectedAnchor = new Vector3(0f, 0.36f, -3.4f);
 	}
 
 	public void resetCargo()
@@ -65,18 +65,18 @@ public class CargoController : MonoBehaviour
 	{
 		if (other.gameObject.CompareTag("wall"))
 		{
-			if (Agent != null)
+			if (m_agent != null)
 			{
 				// Debug.Log("Cargo hit wall");
-				Agent.EndingEp(Agent.failReward);
+				m_agent.EndingEp(m_agent.FailReward);
 			}
 		}
 		if (other.gameObject.CompareTag("cargo0"))
 		{
-			if (Agent != null) // && other.gameObject != transform.gameObject
+			if (m_agent != null) // && other.gameObject != transform.gameObject
 			{
 				// Debug.Log("Cargo hit cargo");
-				Agent.EndingEp(Agent.failReward);
+				m_agent.EndingEp(m_agent.FailReward);
 			}
 		}
 	}

@@ -6,7 +6,7 @@ using System.Linq;
 public class CargoSpawnController : MonoBehaviour
 {
 	public string CargoTag;
-	private GameObject placementAreas;
+	private GameObject m_placementAreas;
 	[SerializeField] private SceneController sceneController;
 	[SerializeField] private GameObject CargoModel;
 
@@ -15,11 +15,11 @@ public class CargoSpawnController : MonoBehaviour
 
 	void Start()
 	{
-		placementAreas = transform.gameObject;
-		List<Transform> placementAreasList = new List<Transform>(placementAreas.GetComponentsInChildren<Transform>());
+		m_placementAreas = transform.gameObject;
+		List<Transform> placementAreasList = new List<Transform>(m_placementAreas.GetComponentsInChildren<Transform>());
 		foreach (Transform placementArea in placementAreasList)
 		{
-			if(placementArea != placementAreas.transform)
+			if(placementArea != m_placementAreas.transform)
 			{	
 				CargoArea.Add(new CargoItem { 
 					id = -1, 

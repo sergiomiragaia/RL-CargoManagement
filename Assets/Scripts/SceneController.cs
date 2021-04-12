@@ -6,29 +6,35 @@ using Unity.MLAgents;
 
 public class SceneController : MonoBehaviour
 {
-
-	public int stepSaturation = 1000000;
-	[SerializeField] public List<GameObject> GoalAreas;
-	[SerializeField] public List<GameObject> CargoAreas;
+	public List<GameObject> GoalAreas;
+	public List<GameObject> CargoAreas;
 	public List<GameObject> spawnedCargoes;
-	[SerializeField] public List<AgentSpawnArea> AgentSpawnAreas;
+	public List<AgentSpawnArea> AgentSpawnAreas;
 	[SerializeField] private TagMaster agent;
 	[SerializeField] private List<GameObject> walls;
 
-	[SerializeField] public int simultaneousCargo = 2;
-	[SerializeField] public int targetCargo = 2;
-	private int nextId = 0;
-	public int step;
-	public int agentPeriod = 0;
-	public bool freeToLoad = true;
-	public float currentRatio = 0;
+	public int simultaneousCargo = 2;
+	public int targetCargo = 2;
+	private int m_nextId = 0;
+	private int m_step = 0;
+	public bool m_freeToLoad = true;
+
 	EnvironmentParameters m_envParam;
+	private int m_config = -1;
+	private float m_wallProb;
+	private float m_easySpawnProb;
+	private float m_spawnAngle;
+	private float m_maxApprochSpeed;
+	private float m_maxApprochAngle;
+	private float m_maxApprochDistance;
+	private float m_maxBackwardSpeed;
+
+	private int m_agentPeriod;
 
 
 	public void Awake()
 	{
 		m_envParam = Academy.Instance.EnvironmentParameters;
-		step = (int)m_envParam.GetWithDefault("Initial_Step", 0f);
 	}
 
 	void Start()
@@ -48,16 +54,16 @@ public class SceneController : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		step++;
-		if(freeToLoad)
+		m_step++;
+		if(m_freeToLoad)
 		{
 			foreach (GameObject CargoArea in CargoAreas)
 			{
 				CargoSpawnController cargoSpawnController = CargoArea.GetComponent<CargoSpawnController>();
 				if (spawnedCargoes.Count < simultaneousCargo)
 				{
-					cargoSpawnController.spawnCargo(nextId);
-					nextId++;
+					cargoSpawnController.spawnCargo(m_nextId);
+					m_nextId++;
 				}
 			}
 		}
@@ -65,7 +71,7 @@ public class SceneController : MonoBehaviour
 		{
 			agent.finishCount++;
 			// Debug.Log("EndEpisode - AllCargoAreasFilled");
-			agent.EndingEp(agent.successReward,true);
+			agent.EndingEp(agent.SuccessReward);
 		}
 	}
 
@@ -84,24 +90,87 @@ public class SceneController : MonoBehaviour
 
 	public void ResetArea()
 	{
+		m_config = (int)m_envParam.GetWithDefault("cargo_variables", 1);
+		// Wall Prob, Easy Spawn Prob, Spawn Angle Range, Max Approuch Speed, Max Approuch Angle, Max Approuch Dist, Decision Period
+		switch(m_config)
+		{
+			case 0:
+				m_wallProb = 0f;
+				m_easySpawnProb = 0.90f;
+				m_spawnAngle = 0f;
+				m_maxApprochSpeed = 10f;
+				m_maxApprochAngle = 30f;
+				m_maxApprochDistance = 2f;
+				m_maxBackwardSpeed = 4f;
+				break;
+			case 1:
+				m_wallProb = 0.4f;
+				m_easySpawnProb = 0.75f;
+				m_spawnAngle = 15f;
+				m_maxApprochSpeed = 6f;
+				m_maxApprochAngle = 15f;
+				m_maxApprochDistance = 1.5f;
+				m_maxBackwardSpeed = 3.9f;
+				break;
+			case 2:
+				m_wallProb = 0.8f;
+				m_easySpawnProb = 0.5f;
+				m_spawnAngle = 30f;
+				m_maxApprochSpeed = 5f;
+				m_maxApprochAngle = 10f;
+				m_maxApprochDistance = 1f;
+				m_maxBackwardSpeed = 3.8f;
+				break;
+			case 3:
+				m_wallProb = 1f;
+				m_easySpawnProb = 0f;
+				m_spawnAngle = 40f;
+				m_maxApprochSpeed = 5f;
+				m_maxApprochAngle = 5f;
+				m_maxApprochDistance = 1f;
+				m_maxBackwardSpeed = 3.7f;
+				break;
+			case 4:
+				m_wallProb = 1f;
+				m_easySpawnProb = 0f;
+				m_spawnAngle = 50f;
+				m_maxApprochSpeed = 5f;
+				m_maxApprochAngle = 5f;
+				m_maxApprochDistance = 1f;
+				m_maxBackwardSpeed = 3.6f;
+				break;
+			case 5:
+				m_wallProb = 1f;
+				m_easySpawnProb = 0f;
+				m_spawnAngle = 60f;
+				m_maxApprochSpeed = 5f;
+				m_maxApprochAngle = 5f;
+				m_maxApprochDistance = 1f;
+				m_maxBackwardSpeed = 3.5f;
+				break;
+			default:
+				Debug.LogError("Unknown config");
+				break;
+		}
 
-		float unclampedRatio = (float)step/(float)stepSaturation;
-		currentRatio = Mathf.Clamp(unclampedRatio, 0f, 1f);
+		// Update agent
+		m_agentPeriod = (int)m_envParam.GetWithDefault("agent_period",40);
+		agent.updateDecionRequest(m_agentPeriod);
+		agent.MaxApprochSpeed = m_maxApprochSpeed;
+		agent.MaxApprochAngle = m_maxApprochAngle;
+		agent.MaxApprochDistance = m_maxApprochDistance;
+		agent.maxBackwardSpeed = m_maxBackwardSpeed;
 
-		// Update decision requester
-		agentPeriod = agent.updateDecionRequest(unclampedRatio);
-
+		// Easy Spawn Probability
 		foreach(AgentSpawnArea agentSpawnArea in AgentSpawnAreas)
 		{
 			if(agentSpawnArea.isEasy)
 			{
-				agentSpawnArea.Probability = 
-					agentSpawnArea.startProbability * (1 - currentRatio);
+				agentSpawnArea.Probability = m_easySpawnProb;
 			}
 			else
 			{
-				agentSpawnArea.Probability = agentSpawnArea.startProbability +
-					(1 - agentSpawnArea.startProbability) * currentRatio;
+				agentSpawnArea.Probability = (1 - m_easySpawnProb);
 			}
 		}
 
@@ -121,15 +190,15 @@ public class SceneController : MonoBehaviour
 
 		foreach(GameObject wall in walls)
 		{
-			wall.SetActive( Random.value < currentRatio );
+			wall.SetActive( Random.value < m_wallProb );
 		}
 
 		int randomSpawnPoint = Random.Range(0, chosenAgentSpawnArea.places.Count);
 		agent.transform.position = chosenAgentSpawnArea.places[randomSpawnPoint].position;
 		agent.transform.rotation = chosenAgentSpawnArea.places[randomSpawnPoint].rotation;
-		if(!chosenAgentSpawnArea.isEasy) agent.transform.Rotate(0f, Random.Range(-15 * currentRatio, 15 * currentRatio), 0f);
+		if(!chosenAgentSpawnArea.isEasy) agent.transform.Rotate(0f, Random.Range(-m_spawnAngle, m_spawnAngle), 0f);
 
-		freeToLoad = true;
+		m_freeToLoad = true;
 		foreach (GameObject GoalArea in GoalAreas)
 		{
 			GoalAreaController goalAreaController = GoalArea.GetComponent<GoalAreaController>();
